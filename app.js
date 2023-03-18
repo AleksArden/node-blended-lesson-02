@@ -1,26 +1,30 @@
 const express = require('express')
-const logger = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const morgan = require('morgan')
+require('dotenv').config()
 
-const contactsRouter = require('./routes/api/contacts')
+const booksRouter = require('./routers/booksRouter')
 
-const app = express()
+const runServer = async () => {
+  const app = express()
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+  app.use(express.json())
+  app.use(cors())
+  app.use(morgan())
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+  app.use('/api/books', booksRouter)
+  try {
 
-app.use('/api/contacts', contactsRouter)
+    await mongoose.connect(process.env.MONGO_URL)
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+    app.listen(process.env.PORT, () => {
+      console.log('Server running. Port: 8080')
+    })
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
+}
 
-app.use((err, req, res, next) => {
-  const { status } = err
-  res.status(status || 500).json({ message: err.message })
-})
-
-module.exports = app
+runServer()

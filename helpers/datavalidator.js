@@ -1,11 +1,13 @@
 const Joi = require('joi')
 
-const dataValidator = (data) => {
-    const schema = Joi.object({
-        name: Joi.string().required().min(3).max(24),
-        email: Joi.string().required().email(),
-        phone: Joi.string().required(),
+const booksValidator = (data) => Joi.object()
+    .keys({
+        title: Joi.string().min(2).max(255).required(),
+        author: Joi.string().min(2).max(55).required(),
+        image: Joi.string().uri().required(),
+        plot: Joi.string().min(2).max(555).required(),
+        isRead: Joi.boolean(),
     })
-    return schema.validate(data)
-}
-module.exports = dataValidator
+    .validate(data)
+
+module.exports = booksValidator
