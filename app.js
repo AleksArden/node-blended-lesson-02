@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 require('dotenv').config()
 
-const booksRouter = require('./routers/booksRouter')
+const authRouter = require('./routers/authRouter')
+const contactsRouter = require('./routers/contactsRouter')
 
 const runServer = async () => {
   const app = express()
@@ -13,7 +14,8 @@ const runServer = async () => {
   app.use(cors())
   app.use(morgan())
 
-  app.use('/api/books', booksRouter)
+  app.use('/api/auth', authRouter)
+  app.use('/api/contacts', contactsRouter)
   try {
 
     await mongoose.connect(process.env.MONGO_URL)

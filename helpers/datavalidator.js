@@ -1,13 +1,31 @@
 const Joi = require('joi')
 
-const booksValidator = (data) => Joi.object()
+const contactsValidator = (data) => Joi.object()
     .keys({
-        title: Joi.string().min(2).max(255).required(),
-        author: Joi.string().min(2).max(55).required(),
-        image: Joi.string().uri().required(),
-        plot: Joi.string().min(2).max(555).required(),
+        name: Joi.string().required(),
+        number: Joi.string().required(),
+
+    })
+    .validate(data)
+
+const putContactValidator = (data) => Joi.object()
+    .keys({
+        name: Joi.string(),
+        number: Joi.string(),
+
+    })
+    .validate(data)
+
+const isReadValidator = (data) => Joi.object()
+    .keys({
         isRead: Joi.boolean(),
     })
     .validate(data)
 
-module.exports = booksValidator
+
+
+module.exports = {
+    contactsValidator,
+    putContactValidator,
+    isReadValidator,
+}
